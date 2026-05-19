@@ -1,0 +1,33 @@
+[
+  {
+    "id": "browser",
+    "name": "Browser",
+    "icon": "globe",
+    "url": "https://www.google.com/webhp?igu=1",
+    "windowSizeDefault": "100%",
+    "isIframe": true
+  },
+  {
+    "id": "tetris",
+    "name": "Tetris",
+    "icon": "gamepad-2",
+    "url": "https://skegdeveloper.online/tetris/",
+    "windowSizeDefault": "100%",
+    "isIframe": true
+  },
+  {
+    "id": "about",
+    "name": "About Me",
+    "icon": "user",
+    "url": "https://www.skegdeveloper.online",
+    "windowSizeDefault": "100%",
+    "isIframe": true
+  },
+  {
+    "id": "settings",
+    "name": "Settings",
+    "icon": "settings",
+    "windowSizeDefault": "100%",
+    "isIframe": false
+  }
+]

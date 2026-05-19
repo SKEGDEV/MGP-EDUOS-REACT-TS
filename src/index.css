@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-jedi: #00ff00;
+  --color-jedi-glow: rgba(0, 255, 0, 0.5);
+  --color-sith: #ff0000;
+  --color-sith-glow: rgba(255, 0, 0, 0.5);
+}
+
+:root {
+  --bg-color: #f3f4f6; /* Jedi / Light */
+  --text-color: #111827;
+}
+
+.dark {
+  --bg-color: #111827; /* Sith / Dark */
+  --text-color: #f3f4f6;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  overflow: hidden; /* OS should not scroll */
+}
+
+/* Neon utilities for later use in sass/tailwind */
+.neon-border-jedi {
+  box-shadow: 0 0 10px var(--color-jedi-glow), inset 0 0 10px var(--color-jedi-glow);
+  border: 1px solid var(--color-jedi);
+}
+
+.neon-border-sith {
+  box-shadow: 0 0 10px var(--color-sith-glow), inset 0 0 10px var(--color-sith-glow);
+  border: 1px solid var(--color-sith);
+}

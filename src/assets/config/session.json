@@ -1,0 +1,11 @@
+{
+  "demoMode": true,
+  "apiUrl": "https://api.skegdeveloper.online/v1",
+  "demoUser": {
+    "id": "demo-123",
+    "name": "Jedi Knight",
+    "email": "demo@edu-os.local",
+    "theme": "jedi"
+  }
+}
+
