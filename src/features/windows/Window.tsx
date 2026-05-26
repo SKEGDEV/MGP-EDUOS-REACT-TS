@@ -18,10 +18,11 @@ const Window: React.FC<WindowProps> = ({ id, title, children }) => {
   const activeWindowId = useAppSelector((state) => state.os.activeWindowId);
   const theme = useAppSelector((state) => state.os.theme);
 
-  if (!windowState || windowState.isMinimized) return null;
+  if (!windowState) return null;
 
   const isActive = activeWindowId === id;
   const isMaximized = windowState.isMaximized;
+  const [isDragging, setIsDragging] = React.useState(false);
 
   const [maxDimensions, setMaxDimensions] = React.useState({
     width: window.innerWidth,
@@ -47,10 +48,14 @@ const Window: React.FC<WindowProps> = ({ id, title, children }) => {
     <Rnd
       size={isMaximized ? { width: maxDimensions.width, height: maxDimensions.height } : windowState.size}
       position={isMaximized ? { x: 0, y: 0 } : windowState.position}
+      onDragStart={() => setIsDragging(true)}
+      onResizeStart={() => setIsDragging(true)}
       onDragStop={(_e, d) => {
+        setIsDragging(false);
         if (!isMaximized) dispatch(updateWindowPosition({ id, position: { x: d.x, y: d.y } }));
       }}
       onResizeStop={(_e, _direction, ref, _delta, position) => {
+        setIsDragging(false);
         if (!isMaximized) {
           dispatch(updateWindowSize({ id, size: { width: ref.style.width, height: ref.style.height } }));
           dispatch(updateWindowPosition({ id, position }));
@@ -60,7 +65,7 @@ const Window: React.FC<WindowProps> = ({ id, title, children }) => {
       enableResizing={!isMaximized}
       minWidth={300}
       minHeight={200}
-      bounds="parent"
+      bounds="window"
       dragHandleClassName="window-titlebar"
       onMouseDown={() => dispatch(focusWindow(id))}
       style={{ 
@@ -69,7 +74,7 @@ const Window: React.FC<WindowProps> = ({ id, title, children }) => {
         border: `2px solid ${themeColor}`,
         borderRadius: '0.5rem',
         overflow: 'hidden',
-        display: 'flex',
+        display: windowState.isMinimized ? 'none' : 'flex',
         flexDirection: 'column',
         boxShadow: isActive ? `0 0 20px ${themeColor}` : 'none'
       }}
@@ -85,17 +90,17 @@ const Window: React.FC<WindowProps> = ({ id, title, children }) => {
           padding: '0.5rem 1rem',
           borderBottom: '1px solid #000'
         }}
-        onDoubleClick={() => dispatch(toggleMaximize(id))}
+        onDoubleClick={(e) => { e.stopPropagation(); dispatch(toggleMaximize(id)); }}
       >
         <span style={{ color: '#fff', fontWeight: 'bold', fontSize: '0.875rem' }}>{title}</span>
         <div className="flex items-center gap-2">
-          <button onClick={() => dispatch(toggleMinimize(id))} className="p-1 rounded text-white bg-black/30 hover:bg-black/50 transition-colors">
+          <button onClick={(e) => { e.stopPropagation(); dispatch(toggleMinimize(id)); }} className="p-1 rounded text-white bg-black/30 hover:bg-black/50 transition-colors">
             <Minus size={16} />
           </button>
-          <button onClick={() => dispatch(toggleMaximize(id))} className="p-1 rounded text-white bg-black/30 hover:bg-black/50 transition-colors">
+          <button onClick={(e) => { e.stopPropagation(); dispatch(toggleMaximize(id)); }} className="p-1 rounded text-white bg-black/30 hover:bg-black/50 transition-colors">
             <Square size={14} />
           </button>
-          <button onClick={() => dispatch(closeWindow(id))} className="p-1 rounded text-white bg-red-600 hover:bg-red-500 transition-colors">
+          <button onClick={(e) => { e.stopPropagation(); dispatch(closeWindow(id)); }} className="p-1 rounded text-white bg-red-600 hover:bg-red-500 transition-colors">
             <X size={16} />
           </button>
         </div>
@@ -104,8 +109,10 @@ const Window: React.FC<WindowProps> = ({ id, title, children }) => {
       {/* Content */}
       <div style={{ flex: 1, position: 'relative', overflow: 'hidden', backgroundColor: '#000' }}>
         {/* Render an overlay to prevent iframe stealing focus while dragging */}
-        <div className="absolute inset-0 z-0 pointer-events-none window-drag-overlay hidden" />
-        {children}
+        {isDragging && <div className="absolute inset-0 z-50 bg-transparent" />}
+        <div style={{ width: '100%', height: '100%', pointerEvents: isDragging ? 'none' : 'auto' }}>
+          {children}
+        </div>
       </div>
     </Rnd>
   );

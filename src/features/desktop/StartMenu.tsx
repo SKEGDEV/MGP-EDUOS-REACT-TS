@@ -36,17 +36,9 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, onClose }) => {
       }
       dispatch(focusWindow(existingWindow.id));
     } else {
-      let width = 800;
-      let height = 600;
-
-      if (app.windowSizeDefault) {
-        if (typeof app.windowSizeDefault === 'string' && app.windowSizeDefault.endsWith('%')) {
-          const percentage = parseFloat(app.windowSizeDefault) / 100;
-          width = Math.round(window.innerWidth * percentage);
-        } else {
-          width = parseInt(app.windowSizeDefault, 10);
-        }
-      }
+      // Default restored size: 80% of screen, max 1024x768
+      const width = Math.min(1024, window.innerWidth * 0.8);
+      const height = Math.min(768, window.innerHeight * 0.8);
 
       const newWinId = `win-${app.id}-${Date.now()}`;
       dispatch(openWindow({

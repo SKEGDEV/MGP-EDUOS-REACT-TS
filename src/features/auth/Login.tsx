@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useAppDispatch, useAppSelector, setTheme, setAuthenticated } from "@core";
 import sessionConfig from "@assets/config/session.json";
 import { Swords, Shield, ArrowLeft } from "lucide-react";
-
+import DecisionScreen from "./DecisionScreen";
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -68,6 +68,10 @@ const Login = () => {
     "text-sm text-gray-400 hover:text-white transition-colors cursor-pointer text-center block mt-4";
   const titleClass = `text-3xl font-bold uppercase tracking-wider ${theme === "jedi" ? "text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,0.8)]" : "text-red-500 drop-shadow-[0_0_10px_rgba(248,113,113,0.8)]"}`;
 
+  if (step === "choose_side") {
+    return <DecisionScreen onSelectSide={handleSelectSide} />;
+  }
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gray-900 overflow-hidden relative">
       <div
@@ -75,30 +79,6 @@ const Login = () => {
       ></div>
 
       <div className="relative z-10 w-full max-w-md p-8 rounded-2xl backdrop-blur-md bg-white/10 dark:bg-black/40 shadow-2xl border border-white/20">
-        {step === "choose_side" && (
-          <div className="text-center animate-fade-in">
-            <h1 className="text-4xl font-black mb-8 text-white uppercase tracking-widest drop-shadow-lg">
-              Choose Your Path
-            </h1>
-            <div className="grid grid-cols-2 gap-6">
-              <button
-                onClick={() => handleSelectSide("jedi")}
-                className="group relative flex flex-col items-center justify-center p-6 rounded-xl border border-green-500/30 hover:border-green-400 bg-green-500/10 hover:bg-green-500/20 transition-all duration-300"
-              >
-                <Shield className="w-16 h-16 text-green-400 mb-4 group-hover:drop-shadow-[0_0_15px_rgba(74,222,128,0.8)]" />
-                <span className="text-green-100 font-bold tracking-wider">JEDI</span>
-              </button>
-
-              <button
-                onClick={() => handleSelectSide("sith")}
-                className="group relative flex flex-col items-center justify-center p-6 rounded-xl border border-red-500/30 hover:border-red-400 bg-red-500/10 hover:bg-red-500/20 transition-all duration-300"
-              >
-                <Swords className="w-16 h-16 text-red-500 mb-4 group-hover:drop-shadow-[0_0_15px_rgba(248,113,113,0.8)]" />
-                <span className="text-red-100 font-bold tracking-wider">SITH</span>
-              </button>
-            </div>
-          </div>
-        )}
 
         {step === "login" && (
           <div className="animate-fade-in">
