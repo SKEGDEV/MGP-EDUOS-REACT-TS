@@ -1,6 +1,6 @@
-import { createRouter, createRoute, createRootRoute } from '@tanstack/react-router';
-import App from '../../App';
-import { Desktop, Login } from '@features';
+import { createRouter, createRoute, createRootRoute } from "@tanstack/react-router";
+import App from "../../App";
+import { Desktop, Login } from "@features";
 
 const rootRoute = createRootRoute({
   component: App,
@@ -8,21 +8,21 @@ const rootRoute = createRootRoute({
 
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/',
+  path: "/",
   component: Login,
 });
 
 const desktopRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/desktop',
+  path: "/desktop",
   component: Desktop,
 });
 
 const routeTree = rootRoute.addChildren([indexRoute, desktopRoute]);
 
-export const router = createRouter({ routeTree });
+export const router = createRouter({ routeTree, basepath: "/eduos/" });
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }
